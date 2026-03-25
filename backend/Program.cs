@@ -25,16 +25,22 @@ app.UseHttpsRedirection();
 // GET /api/books
 // Returns a paginated, sorted page of books plus the total record count.
 // Query parameters:
-//   pageNum  - which page to return (1-based, default: 1)
-//   pageSize - how many books per page (default: 5)
+//   pageNum   - which page to return (1-based, default: 1)
+//   pageSize  - how many books per page (default: 5)
 //   sortOrder - "asc" or "desc" to sort by title (default: "asc")
+//   category  - filter to a specific category (optional)
 app.MapGet("/api/books", async (
     BookstoreContext db,
     int pageNum = 1,
     int pageSize = 5,
-    string sortOrder = "asc") =>
+    string sortOrder = "asc",
+    string? category = null) =>
 {
     var query = db.Books.AsQueryable();
+
+    // Filter by category when provided
+    if (!string.IsNullOrEmpty(category))
+        query = query.Where(b => b.Category == category);
 
     // Apply title sort before paging so each page is in the correct order
     query = sortOrder == "desc"
@@ -51,6 +57,18 @@ app.MapGet("/api/books", async (
         .ToListAsync();
 
     return Results.Ok(new { books, total });
+});
+
+// GET /api/books/categories
+// Returns a sorted list of all distinct book categories in the database.
+app.MapGet("/api/books/categories", async (BookstoreContext db) =>
+{
+    var categories = await db.Books
+        .Select(b => b.Category)
+        .Distinct()
+        .OrderBy(c => c)
+        .ToListAsync();
+    return Results.Ok(categories);
 });
 
 app.Run();
