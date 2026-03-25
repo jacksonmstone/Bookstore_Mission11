@@ -17,3 +17,9 @@ export interface BooksResponse {
   books: Book[];  // the current page of books
   total: number;  // total number of books in the database (used to calculate page count)
 }
+
+// Represents a single line item in the shopping cart
+export interface CartItem {
+  book: Book;
+  quantity: number;
+}
