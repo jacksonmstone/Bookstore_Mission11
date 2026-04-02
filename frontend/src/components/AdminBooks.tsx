@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Book } from '../types/Book';
 
-const API = 'http://localhost:5017/api/books';
+const API = 'https://mission13-fdddcxgkcpbsa0gx.centralus-01.azurewebsites.net/api/books';
 
 const emptyForm = (): Omit<Book, 'bookId'> => ({
   title: '',

@@ -25,7 +25,7 @@ function BookList({ onViewCart }: BookListProps) {
 
   // Fetch the list of distinct categories once on mount
   useEffect(() => {
-    fetch('http://localhost:5017/api/books/categories')
+    fetch('https://mission13-fdddcxgkcpbsa0gx.centralus-01.azurewebsites.net/api/books/categories')
       .then((res) => res.json())
       .then((data: string[]) => setCategories(data));
   }, []);
@@ -37,7 +37,7 @@ function BookList({ onViewCart }: BookListProps) {
       ? `&category=${encodeURIComponent(selectedCategory)}`
       : '';
     fetch(
-      `http://localhost:5017/api/books?pageNum=${pageNum}&pageSize=${pageSize}&sortOrder=${sortOrder}${categoryParam}`
+      `https://mission13-fdddcxgkcpbsa0gx.centralus-01.azurewebsites.net/api/books?pageNum=${pageNum}&pageSize=${pageSize}&sortOrder=${sortOrder}${categoryParam}`
     )
       .then((res) => res.json())
       .then((data: BooksResponse) => {
